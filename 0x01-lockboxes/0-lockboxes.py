@@ -1,18 +1,19 @@
 #!/usr/bin/python3
+"""method that determines if all the boxes can be opened"""
 
 
 def canUnlockAll(boxes):
     if not boxes:
         return False
 
-    # Initialize a set to keep track of the boxes we can visit
+    """Initialize a set to keep track of the boxes we can visit"""
     unlocked_boxes = set()
     unlocked_boxes.add(0)  # Start with the first box
 
-    # Initialize a stack for DFS (Depth-First Search)
+    """Initialize a stack for DFS (Depth-First Search)"""
     stack = [0]
 
-    # Perform DFS to unlock boxes
+    """Perform DFS to unlock boxes"""
     while stack:
         current_box = stack.pop()
         keys = boxes[current_box]
@@ -22,7 +23,6 @@ def canUnlockAll(boxes):
                 unlocked_boxes.add(key)
                 stack.append(key)
 
-    # Check if all boxes have been visited
     return len(unlocked_boxes) == len(boxes)
 
 
