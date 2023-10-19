@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import sys
 
+
 def print_stats(total_size, status_counts):
     """
     Print the statistics: total file size and number of lines by status code.
@@ -9,7 +10,7 @@ def print_stats(total_size, status_counts):
     sorted_status_codes = sorted(status_counts.keys())
     for code in sorted_status_codes:
         if status_counts[code] > 0:
-            print("{}: {}".format(code, status_counts[code])
+            print("{}: {}".format(code, status_counts[code]))
 
 def main():
     total_size = 0
