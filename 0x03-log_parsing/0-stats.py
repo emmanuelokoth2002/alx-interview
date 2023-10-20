@@ -1,17 +1,17 @@
 #!/usr/bin/python3
-"""This module reads stdin line and computes metrics"""
+"""This module reads stdin line by line and computes metrics."""
 import sys
 
-possible_status_codes = [200, 301, 400, 401, 403, 404, 405, 500]
-lines_read = 0
-status_codes_map = {}
-total_file_size = 0
+POSSIBLE_STATUS_CODES = {200, 301, 400, 401, 403, 404, 405, 500}
+LINES_READ = 0
+STATUS_CODES_MAP = {}
+TOTAL_FILE_SIZE = 0
 
 
 def print_stats():
-    """prints out statistics:total file size,the number of lines by status"""
-    print("File size: {}".format(total_file_size))
-    for status, count in sorted(status_codes_map.items()):
+    """Prints out the statistics."""
+    print("File size: {}".format(TOTAL_FILE_SIZE))
+    for status, count in sorted(STATUS_CODES_MAP.items()):
         print("{}: {}".format(status, count))
 
 
@@ -20,21 +20,18 @@ try:
         line_tokens = line.split()
         try:
             file_size = int(line_tokens[-1])
-            total_file_size += file_size
+            TOTAL_FILE_SIZE += file_size
             status_code = int(line_tokens[-2])
-            if status_code in possible_status_codes:
-                if status_code in status_codes_map:
-                    status_codes_map[status_code] += 1
-                else:
-                    status_codes_map[status_code] = 1
+            if status_code in POSSIBLE_STATUS_CODES:
+                STATUS_CODES_MAP[status_code] = STATUS_CODES_MAP.get(status_code, 0) + 1
         except ValueError:
             pass
-        lines_read += 1
-        if lines_read % 10 == 0:
+        LINES_READ += 1
+        if LINES_READ % 10 == 0:
             print_stats()
 
-    if (lines_read == 0) or (lines_read % 10 != 0):
+    if LINES_READ % 10 != 0:
         print_stats()
 
-except (KeyboardInterrupt):
+except KeyboardInterrupt:
     print_stats()
