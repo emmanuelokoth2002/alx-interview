@@ -9,30 +9,22 @@ def validUTF8(data):
         return (byte & 0b10000000) == 0b00000000
 
     i = 0
-    while i < len(data):
-        byte = data[i]
-
-        if is_start_byte(byte):
-            if (byte & 0b10000000) == 0b00000000:
-                length = 1
-            elif (byte & 0b11100000) == 0b11000000:
-                length = 2
-            elif (byte & 0b11110000) == 0b11100000:
-                length = 3
-            elif (byte & 0b11111000) == 0b11110000:
-                length = 4
+    for x in data:
+        if i == 0:
+            if x & 128 == 0:
+                i = 0
+            elif x & 224 == 192:
+                i = 1
+            elif x & 240 == 224:
+                i = 2
+            elif x & 248 == 240:
+                i = 3
             else:
                 return False
-
-            if i + length > len(data):
-                return False
-
-            for j in range(1, length):
-                if (data[i + j] & 0b11000000) != 0b10000000:
-                    return False
-
-            i += length
         else:
-            return False
-
-    return True
+            if x & 192 != 128:
+                return False
+            i -= 1
+    if i == 0:
+        return True
+    return False
