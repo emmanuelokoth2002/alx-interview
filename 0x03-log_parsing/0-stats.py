@@ -1,37 +1,40 @@
 #!/usr/bin/python3
-"""This module reads stdin line by line and computes metrics."""
+
 import sys
 
-POSSIBLE_STATUS_CODES = {200, 301, 400, 401, 403, 404, 405, 500}
-LINES_READ = 0
-STATUS_CODES_MAP = {}
-TOTAL_FILE_SIZE = 0
+
+def print_statistics(file_size, status_codes):
+    """Prints statistics"""
+    print(f"File size: {file_size}")
+    for code in sorted(status_codes):
+        if status_codes[code] != 0:
+            print(f"{code}: {status_codes[code]}")
 
 
-def print_stats():
-    """Prints out the statistics."""
-    print("File size: {}".format(TOTAL_FILE_SIZE))
-    for status, count in sorted(STATUS_CODES_MAP.items()):
-        print("{}: {}".format(status, count))
+def parse_line(line, file_size, status_codes):
+    """Parses each line and updates statistics"""
+    return file_size, status_codes
 
 
-try:
-    for line in sys.stdin:
-        line_tokens = line.split()
-        try:
-            file_size = int(line_tokens[-1])
-            TOTAL_FILE_SIZE += file_size
-            status_code = int(line_tokens[-2])
-            if status_code in POSSIBLE_STATUS_CODES:
-                STATUS_CODES_MAP[status_code] = STATUS_CODES_MAP.get(status_code, 0) + 1
-        except ValueError:
-            pass
-        LINES_READ += 1
-        if LINES_READ % 10 == 0:
-            print_stats()
+def main():
+    count = 0
+    file_size = 0
+    status_codes = {
+        200: 0, 301: 0, 400: 0, 401: 0,
+        403: 0, 404: 0, 405: 0, 500: 0
+    }
 
-    if LINES_READ % 10 != 0:
-        print_stats()
+    try:
+        for line in sys.stdin:
+            file_size, status_codes = parse_line(line, file_size, status_codes)
+            count += 1
 
-except KeyboardInterrupt:
-    print_stats()
+            if count % 10 == 0:
+                print_statistics(file_size, status_codes)
+
+    except KeyboardInterrupt:
+        print_statistics(file_size, status_codes)
+        raise
+
+if __name__ == '__main__':
+    main()
