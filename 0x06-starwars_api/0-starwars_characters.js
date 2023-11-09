@@ -1,6 +1,6 @@
 #!/usr/bin/node
 
-const request = require('request');
+const axios = require('axios');
 const movieID = process.argv[2];
 
 if (!movieID) {
@@ -10,22 +10,21 @@ if (!movieID) {
 
 const url = `https://swapi.dev/api/films/${movieID}/`;
 
-request(url, (error, response, body) => {
-  if (!error && response.statusCode === 200) {
-    const filmData = JSON.parse(body);
+axios.get(url)
+  .then(response => {
+    const filmData = response.data;
     const characters = filmData.characters;
 
-    characters.forEach((characterURL) => {
-      request(characterURL, (error, response, body) => {
-        if (!error && response.statusCode === 200) {
-          const characterData = JSON.parse(body);
-          console.log(characterData.name);
-        } else {
+    characters.forEach(characterURL => {
+      axios.get(characterURL)
+        .then(response => {
+          console.log(response.data.name);
+        })
+        .catch(error => {
           console.error('Failed to fetch character:', error);
-        }
-      });
+        });
     });
-  } else {
+  })
+  .catch(error => {
     console.error('Failed to fetch movie data:', error);
-  }
-});
+  });
