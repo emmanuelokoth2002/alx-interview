@@ -1,40 +1,35 @@
 #!/usr/bin/python3
 
 
-def is_prime(n):
+def primeNo(x):
     """
-    This function checks for prime numbers.
+    This function checks for prime numbers
     """
-    if n <= 1:
-        return False
-    for i in range(2, int(n**0.5) + 1):
-        if n % i == 0:
-            return False
-    return True
+    primes = []
+    filtered = [True] * (x + 1)
+    for p in range(2, x+1):
+        if (filtered[p]):
+            primes.append(p)
+            for i in range(p, x+1, p):
+                filtered[i] = False
+    return primes
 
 
 def isWinner(x, nums):
     """
     it then determines the winner of the game.
     """
-    maria_wins = 0
-    ben_wins = 0
-    for _ in range(x):
-        n = nums.pop()
-        while n > 1:
-            for num in nums:
-                if is_prime(num) and n % num == 0:
-                    n //= num
-                    break
-            else:
-                break
-        if n == 1:
-            maria_wins += 1
-        else:
-            ben_wins += 1
-    if maria_wins > ben_wins:
-        return "Maria"
-    elif ben_wins > maria_wins:
-        return "Ben"
-    else:
+    if x is None or nums is None or x == 0 or nums == []:
         return None
+    Maria = Ben = 0
+    for i in range(x):
+        primes = primeNo(nums[i])
+        if len(primes) % 2 == 0:
+            Ben += 1
+        else:
+            Maria += 1
+    if Maria > Ben:
+        return 'Maria'
+    elif Ben > Maria:
+        return 'Ben'
+    return None
