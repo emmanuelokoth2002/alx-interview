@@ -12,7 +12,7 @@ def is_prime(n):
     return True
 
 
-def is_winner(x, nums):
+def isWinner(x, nums):
     """
     it then determines the winner of the game.
     """
