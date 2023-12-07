@@ -1,4 +1,7 @@
 #!/usr/bin/python3.4.3
+"""
+0-prime_game.py file
+"""
 
 
 def is_prime(n):
