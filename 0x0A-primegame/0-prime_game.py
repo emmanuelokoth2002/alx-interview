@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+
 def is_prime(n):
     """
     This function checks for prime numbers.
